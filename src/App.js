@@ -20,6 +20,7 @@ class App extends Component {
     this.state = {
       movies: []
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
@@ -43,7 +44,17 @@ class App extends Component {
   //   console.log("my method ran?")
   // }
 
-  
+  handleSubmit(event){
+    event.preventDefault();
+    var value = document.getElementById('searchTerm').value;
+    var url = 'https://api.themoviedb.org/3/search/movie?api_key=fec8b5ab27b292a68294261bb21b04a5&query='+value;
+    $.getJSON(url,(movieSearchData)=>{
+      this.setState({
+        movies: movieSearchData.results
+      })
+    })
+    // console.log('searching......................')
+  }
 
   render() {
     var postersArray = [];
@@ -53,6 +64,10 @@ class App extends Component {
     return (
       <div className="App">
         <h1>this is the movie app....</h1>
+        <form onSubmit={this.handleSubmit}>
+          <input id="searchTerm" type="text" placeholder="movie title" />
+          <button type="submit" className="btn btn-danger">search</button>
+        </form>
         {postersArray}
       </div>
     );
